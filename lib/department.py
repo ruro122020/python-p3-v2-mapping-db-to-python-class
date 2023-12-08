@@ -78,6 +78,8 @@ class Department:
 
     @classmethod
     def instance_from_db(cls, row):
+        """Return a Department object having the attribute values from the table row."""
+
         # Check the dictionary for an existing instance using the row's primary key
         department = cls.all.get(row[0])
         if department:            
@@ -94,6 +96,8 @@ class Department:
 
     @classmethod
     def get_all(cls):
+        """Return a list containing a Department object per row in the table"""
+
         sql = """
             SELECT * FROM departments
         """
@@ -101,3 +105,14 @@ class Department:
         rows = CURSOR.execute(sql).fetchall()
 
         return [cls.instance_from_db(row) for row in rows]
+    
+    @classmethod 
+    def find_by_id(cls, id):        
+        """Return a Department object corresponding to the table row matching the specified primary key"""
+        sql = """
+            SELECT * 
+            FROM departments
+            WHERE id = ?
+        """
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
