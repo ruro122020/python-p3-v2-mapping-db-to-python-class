@@ -92,3 +92,12 @@ class Department:
             cls.all[department.id] = department
         return department
 
+    @classmethod
+    def get_all(cls):
+        sql = """
+            SELECT * FROM departments
+        """
+
+        rows = CURSOR.execute(sql).fetchall()
+
+        return [cls.instance_from_db(row) for row in rows]
